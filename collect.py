@@ -47,9 +47,14 @@ def main(args):
         return
     def future(n):
         return datetime.now() + timedelta(days=n)
-    days = [datetime.now()]
+    days = []
+    if not args.exclude_today:
+        days += [datetime.now()]
     for i in range(1, 1+args.future_days):
         days += [future(i)]
+    for i in args.days: # YYYYMMDD
+        days += [datetime(i//10000, (i//100)%100, i%100)]
+    print('days: %s', days)
     for day in days:
         mkdirs('data/%s-%s/%s' % (origin, dest, fmtymd(day)))
         try:
@@ -64,5 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('--origin', type=str, help='the origin station')
     parser.add_argument('--dest', type=str, help='the destination station')
     parser.add_argument('--future-days', type=int, default=0, help='future days to scrape for (with n=1, scrape today and tomorrow)')
+    parser.add_argument('--days', type=int, nargs='+', help='dates in YYYYMMDD format to scrape')
+    parser.add_argument('--exclude-today', action='set_true', help='excludes today')
 
     main(parser.parse_args())
