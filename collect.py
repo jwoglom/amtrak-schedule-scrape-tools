@@ -50,9 +50,9 @@ def main(args):
     days = []
     if not args.exclude_today:
         days += [datetime.now()]
-    for i in range(1, 1+args.future_days):
+    for i in range(1, 1+(args.future_days or 0)):
         days += [future(i)]
-    for i in args.days: # YYYYMMDD
+    for i in args.days or []: # YYYYMMDD
         days += [datetime(i//10000, (i//100)%100, i%100)]
     print('days: %s', days)
     for day in days:
