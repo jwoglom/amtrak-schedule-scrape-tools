@@ -54,7 +54,7 @@ def main(args):
         days += [future(i)]
     for i in args.days or []: # YYYYMMDD
         days += [datetime(i//10000, (i//100)%100, i%100)]
-    print('days: %s', days)
+    print('days: %s' % [d.date() for d in days])
     for day in days:
         mkdirs('%s/%s-%s/%s' % (args.output, origin, dest, fmtymd(day)))
         try:
