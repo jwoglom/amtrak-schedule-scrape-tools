@@ -16,7 +16,7 @@ def fmtamtrak(d):
     return d.strftime('%m/%d/%Y')
 
 URL = 'http://localhost:3000/request'
-def fetch(origin, dest, d):
+def fetch(origin, dest, d, folder):
     ymd = fmtymd(d)
     damtrak = fmtamtrak(d)
     now = datetime.now().strftime('%Y%m%d-%H%M')
@@ -28,7 +28,7 @@ def fetch(origin, dest, d):
         if r.text.startswith('{"error"'):
             print('Amtrak ratelimit', origin, dest, d, r.text)
         else:
-            open('data/%s-%s/%s/%s.json' % (origin, dest, ymd, now), 'w').write(r.text)
+            open('%s/%s-%s/%s/%s.json' % (folder, origin, dest, ymd, now), 'w').write(r.text)
             print('OK', origin, dest, d)
     else:
         print('Server Error', origin, dest, d, r.text)
@@ -56,9 +56,9 @@ def main(args):
         days += [datetime(i//10000, (i//100)%100, i%100)]
     print('days: %s', days)
     for day in days:
-        mkdirs('data/%s-%s/%s' % (origin, dest, fmtymd(day)))
+        mkdirs('%s/%s-%s/%s' % (args.output, origin, dest, fmtymd(day)))
         try:
-            fetch(origin, dest, day)
+            fetch(origin, dest, day, args.output)
         except Exception as e:
             print("Exception:", e)
         time.sleep(30)
@@ -71,5 +71,6 @@ if __name__ == '__main__':
     parser.add_argument('--future-days', type=int, default=0, help='future days to scrape for (with n=1, scrape today and tomorrow)')
     parser.add_argument('--days', type=int, nargs='+', help='dates in YYYYMMDD format to scrape')
     parser.add_argument('--exclude-today', action='set_true', help='excludes today')
+    parser.add_argument('--output', type=str, help='the output folder', default='data')
 
     main(parser.parse_args())
