@@ -70,7 +70,7 @@ if __name__ == '__main__':
     parser.add_argument('--dest', type=str, help='the destination station')
     parser.add_argument('--future-days', type=int, default=0, help='future days to scrape for (with n=1, scrape today and tomorrow)')
     parser.add_argument('--days', type=int, nargs='+', help='dates in YYYYMMDD format to scrape')
-    parser.add_argument('--exclude-today', action='set_true', help='excludes today')
+    parser.add_argument('--exclude-today', action='store_true', default=False, help='excludes today')
     parser.add_argument('--output', type=str, help='the output folder', default='data')
 
     main(parser.parse_args())
