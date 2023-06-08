@@ -50,7 +50,7 @@ def main(args):
     days = []
     if not args.exclude_today:
         days += [datetime.now()]
-    for i in range(1, 1+(args.future_days or 0)):
+    for i in range(args.future_days_start_after, args.future_days_start_after+(args.future_days or 0)):
         days += [future(i)]
     for i in args.days or []: # YYYYMMDD
         days += [datetime(i//10000, (i//100)%100, i%100)]
@@ -69,6 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('--origin', type=str, help='the origin station')
     parser.add_argument('--dest', type=str, help='the destination station')
     parser.add_argument('--future-days', type=int, default=0, help='future days to scrape for (with n=1, scrape today and tomorrow)')
+    parser.add_argument('--future-days-start-after', type=int, default=1, help='day to start at for future-days (with future-days-start-after=1, future-days=1 starts tomorrow)')
     parser.add_argument('--days', type=int, nargs='+', help='dates in YYYYMMDD format to scrape')
     parser.add_argument('--exclude-today', action='store_true', default=False, help='excludes today')
     parser.add_argument('--output', type=str, help='the output folder', default='data')
