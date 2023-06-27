@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# give time for scraping to start
+sleep 1000
+
 while true; do
 
 # Find files in the folder that were created within the past hour

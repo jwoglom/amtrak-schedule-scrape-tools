@@ -27,6 +27,7 @@ def fetch(origin, dest, d, folder):
     if r.status_code // 100 == 2:
         if r.text.startswith('{"error"'):
             print('Amtrak ratelimit', origin, dest, d, r.text)
+            time.sleep(120)
         else:
             open('%s/%s-%s/%s/%s.json' % (folder, origin, dest, ymd, now), 'w').write(r.text)
             print('OK', origin, dest, d)
